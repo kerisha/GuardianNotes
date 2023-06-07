@@ -11,7 +11,7 @@ body {
     flex-direction: column;
     width: 320px;
     border-radius: 0.75rem;
-    background-color: rgba(17, 24, 39, 1);
+    background-color: rgb(255, 255, 255);
     padding: 2rem;
     color: rgba(243, 244, 246, 1);
     margin:auto;
@@ -22,6 +22,7 @@ body {
     font-size: 1.5rem;
     line-height: 2rem;
     font-weight: 700;
+    color:rgb(11, 13, 18)
   }
   
   .form {
@@ -36,7 +37,7 @@ body {
   
   .input-group label {
     display: block;
-    color: rgba(156, 163, 175, 1);
+    color: rgb(25, 28, 34);
     margin-bottom: 4px;
   }
   
@@ -45,9 +46,9 @@ body {
     border-radius: 0.375rem;
     border: 1px solid rgba(55, 65, 81, 1);
     outline: 0;
-    background-color: rgba(17, 24, 39, 1);
+    background-color: rgb(255, 255, 255);
     padding: 0.75rem 1rem;
-    color: rgba(243, 244, 246, 1);
+    color: rgb(84, 87, 93);
   }
   
   .input-group input:focus {
@@ -59,14 +60,15 @@ body {
     justify-content: flex-end;
     font-size: 0.75rem;
     line-height: 1rem;
-    color: rgba(156, 163, 175,1);
+    color: rgb(27, 31, 38);
     margin: 8px 0 14px 0;
   }
   
   .forgot a,.signup a {
-    color: rgba(243, 244, 246, 1);
+    color: rgb(68, 70, 73);
     text-decoration: none;
     font-size: 14px;
+    font-weight: 800;
   }
   
   .forgot a:hover, .signup a:hover {
@@ -102,7 +104,7 @@ body {
     padding-right: 0.75rem;
     font-size: 0.875rem;
     line-height: 1.25rem;
-    color: rgba(156, 163, 175, 1);
+    color: rgb(11, 13, 18);
   }
   
   .social-icons {
@@ -121,13 +123,13 @@ body {
   .social-icons .icon svg {
     height: 1.25rem;
     width: 1.25rem;
-    fill: #fff;
+    fill: #000000;
   }
   
   .signup {
     text-align: center;
     font-size: 0.75rem;
     line-height: 1rem;
-    color: rgba(156, 163, 175, 1);
+    color: rgb(37, 41, 47);
   }
   

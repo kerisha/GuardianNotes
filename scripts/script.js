@@ -44,7 +44,7 @@ function showNotes() {
                                 <ul class="menu">
                                     <li onclick="updateNote(${id}, '${note.title}', '${filterDesc}')"><i class="uil uil-pen"></i>Edit</li>
                                     <li onclick="deleteNote(${id})"><i class="uil uil-trash"></i>Delete</li>
-                                    <li onclick="unlockNote(${id})"><i class="uil uil-lock"></i>Lock</li>
+                                    ${note.locked ? `<li onclick="unlock(${id})"><i class="uil uil-lock-open-alt"></i>Unlock</li>` : `<li onclick="lock(${id})"><i class="uil uil-lock-alt"></i>Lock</li>`}
                                 </ul>
                             </div>
                         </div>
@@ -61,6 +61,18 @@ function showMenu(elem) {
             elem.parentElement.classList.remove("show");
         }
     });
+}
+
+function lock(noteId) {
+    notes[noteId].locked = true;
+    localStorage.setItem("notes", JSON.stringify(notes));
+    showNotes();
+}
+
+function unlock(noteId) {
+    notes[noteId].locked = false;
+    localStorage.setItem("notes", JSON.stringify(notes));
+    showNotes();
 }
 
 function deleteNote(noteId) {
@@ -93,7 +105,7 @@ addBtn.addEventListener("click", e => {
         day = currentDate.getDate(),
         year = currentDate.getFullYear();
 
-        let noteInfo = {title, description, date: `${month} ${day}, ${year}`}
+        let noteInfo = {title, description, date: `${month} ${day}, ${year}`, locked: false}
         if(!isUpdate) {
             notes.push(noteInfo);
         } else {
