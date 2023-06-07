@@ -4,7 +4,8 @@ popupTitle = popupBox.querySelector("header p"),
 closeIcon = popupBox.querySelector("header i"),
 titleTag = popupBox.querySelector("input"),
 descTag = popupBox.querySelector("textarea"),
-addBtn = popupBox.querySelector("button");
+addBtn = popupBox.querySelector("#note-popup-btn");
+userCamView = document.querySelector(".user-cam-view");
 
 const months = ["January", "February", "March", "April", "May", "June", "July",
               "August", "September", "October", "November", "December"];
@@ -13,6 +14,8 @@ const notes_redacted = JSON.parse(localStorage.getItem("notes_redacted") || "[]"
 let isUpdate = false, updateId;
 
 addBox.addEventListener("click", () => {
+    addBtn.hidden = false;
+    userCamView.hidden = true;
     popupTitle.innerText = "Add a new Note";
     addBtn.innerText = "Add Note";
     popupBox.classList.add("show");
@@ -42,9 +45,8 @@ function showNotes() {
                             <div class="settings">
                                 <i onclick="showMenu(this)" class="uil uil-ellipsis-h"></i>
                                 <ul class="menu">
-                                    <li onclick="updateNote(${id}, '${note.title}', '${filterDesc}')"><i class="uil uil-pen"></i>Edit</li>
                                     <li onclick="deleteNote(${id})"><i class="uil uil-trash"></i>Delete</li>
-                                    ${note.locked ? `<li onclick="unlock(${id})"><i class="uil uil-lock-open-alt"></i>Unlock</li>` : `<li onclick="lock(${id})"><i class="uil uil-lock-alt"></i>Lock</li>`}
+                                    <li onclick="unlock(${id}, '${note.title}', '${filterDesc}')"><i class="uil uil-lock-open-alt"></i>Unlock</li>
                                 </ul>
                             </div>
                         </div>
@@ -65,15 +67,41 @@ function showMenu(elem) {
 
 function lock(noteId) {
     notes[noteId].locked = true;
+    // TODO: Redact note
     localStorage.setItem("notes", JSON.stringify(notes));
     showNotes();
 }
 
-function unlock(noteId) {
-    notes[noteId].locked = false;
-    localStorage.setItem("notes", JSON.stringify(notes));
-    showNotes();
+async function unlock(noteId, title, filterDesc) {
+    let description = filterDesc.replaceAll('<br/>', '\r\n');
+    updateId = noteId;
+    isUpdate = true;
+    addBox.click();
+    addBtn.hidden = true;
+    userCamView.hidden = false;
+    titleTag.value = title;
+    // Redacted content should initially be shown
+    descTag.value = description;
+    popupTitle.innerText = "Update Note";
+    addBtn.innerText = "Update Note";
+    await sleep(100);
+    // Show Redacted Notes
+    // Verify user
+    if(verifyUser()) {
+        addBtn.hidden = false;
+        // Show plain notes (unredacted) once user is verified
+        // Enable editing
+        
+    }
+    else {
+        alert("User not verified");
+        //closeIcon.click();
+    }
 }
+
+function sleep(milliseconds) {  
+    return new Promise(resolve => setTimeout(resolve, milliseconds));  
+}  
 
 function deleteNote(noteId) {
     let confirmDel = confirm("Are you sure you want to delete this note?");
@@ -83,15 +111,44 @@ function deleteNote(noteId) {
     showNotes();
 }
 
+function verifyUser() {
+    let verifying = true;
+    var random_boolean = Math.random() < 0.5;
+    console.log(random_boolean);
+    // while(!verifying) {     
+    // }
+    if(!random_boolean) {
+        // alert("User not verified");
+        return false;
+    }
+    else{
+        // alert("User verified");
+        return true;
+    }
+}
+
+function redact(noteId) {}
+
+function redactAll() {}
+
 function updateNote(noteId, title, filterDesc) {
-    let description = filterDesc.replaceAll('<br/>', '\r\n');
-    updateId = noteId;
-    isUpdate = true;
-    addBox.click();
-    titleTag.value = title;
-    descTag.value = description;
-    popupTitle.innerText = "Update a Note";
-    addBtn.innerText = "Update Note";
+    // Get note
+    let note = notes[noteId];
+    if(!note.locked) {
+        let description = filterDesc.replaceAll('<br/>', '\r\n');
+        updateId = noteId;
+        isUpdate = true;
+        addBox.click();
+        addBtn.hidden = false;
+        userCamView.hidden = false;
+        titleTag.value = title;
+        descTag.value = description;
+        popupTitle.innerText = "Update Note";
+        addBtn.innerText = "Update Note";
+    }
+    else {  
+        alert("This note is locked. Please unlock it to edit.");
+    }
 }
 
 addBtn.addEventListener("click", e => {
