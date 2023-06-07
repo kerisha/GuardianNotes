@@ -1,5 +1,5 @@
 # 📗 Guardian Notes
-A secure, simple colorful sticky notes app
+A secure notes app
 
 - Add short notes
 - Choose different colors for notes
