@@ -44,6 +44,7 @@ function showNotes() {
                                 <ul class="menu">
                                     <li onclick="updateNote(${id}, '${note.title}', '${filterDesc}')"><i class="uil uil-pen"></i>Edit</li>
                                     <li onclick="deleteNote(${id})"><i class="uil uil-trash"></i>Delete</li>
+                                    <li onclick="unlockNote(${id})"><i class="uil uil-lock"></i>Lock</li>
                                 </ul>
                             </div>
                         </div>
