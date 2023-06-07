@@ -1,45 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-       integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-
+<!-- Coding By CodingNepal - youtube.com/codingnepal -->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">  
+    <title>Notes App in JavaScript | CodingNepal</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" href="icons/logo.png">
-    <title>Guardian Notes</title>
-</head>
-<body>
-    <nav class="navbar ">
-        <h4 class="m-1"><img src="icons/logo.png" class="icon">Guardian Notes</h4>
-    </nav>
-    
-    <div class="header">
-       <div class="content">
-
-            <div class="note-input">
-                <textarea class="input-text m-1 get-note" rows="3" placeholder="// Write a note here"></textarea>
-                    <div class="action m-3">
-                        <input type="color" value="#ccffcc" class="theme m-1 get-color">
-                        <button class=" btn m-1 " id="add-btn">Add note</button>
-                    </div>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Iconscout Link For Icons -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+  </head>
+  <body>
+    <div class="popup-box">
+      <div class="popup">
+        <div class="content">
+          <header>
+            <p></p>
+            <i class="uil uil-times"></i>
+          </header>
+          <form action="#">
+            <div class="row title">
+              <label>Title</label>
+              <input type="text" spellcheck="false">
             </div>
-       </div> 
+            <div class="row description">
+              <label>Content</label>
+              <textarea spellcheck="false"></textarea>
+            </div>
+            <button></button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="wrapper">
+      <li class="add-box">
+        <div class="icon"><i class="uil uil-plus"></i></div>
+        <p>Add new note</p>
+      </li>
     </div>
 
-       
-    <div class="notes-list mt-3">
-
-        <div class="no-notes">
-            <h4 class="msg">You haven't added notes yet.</h4>
-            <img src="icons/pixeltrue-vision-1.png" class="illustration fluid-img">
-        </div> 
+    <script src="script.js"></script>
     
-    </div>
-
-    <footer class="bottom">&copy KS 2023</a></footer>
-
-</body>
-<script src="app.js"></script>
+  </body>
 </html>
