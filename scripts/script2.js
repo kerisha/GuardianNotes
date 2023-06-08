@@ -1,10 +1,10 @@
 const video = document.getElementById("video");
 
-Promise.all([
-  faceapi.nets.ssdMobilenetv1.loadFromUri("./models"),
-  faceapi.nets.faceRecognitionNet.loadFromUri("./models"),
-  faceapi.nets.faceLandmark68Net.loadFromUri("./models"),
-]).then(startWebcam).then(getLabeledFaceDescriptions);
+// Promise.all([
+//   faceapi.nets.ssdMobilenetv1.loadFromUri("./models"),
+//   faceapi.nets.faceRecognitionNet.loadFromUri("./models"),
+//   faceapi.nets.faceLandmark68Net.loadFromUri("./models"),
+// ]).then(startWebcam).then(getLabeledFaceDescriptions);
 
 function startWebcam() {
   navigator.mediaDevices
@@ -18,6 +18,22 @@ function startWebcam() {
     .catch((error) => {
       console.error(error);
     });
+}
+
+function stopWebcam() {
+  const video = document.getElementById("video");
+  const stream = video.srcObject;
+
+  // Check if stream exists
+  if (stream) {
+    const tracks = stream.getTracks();
+
+    tracks.forEach((track) => {
+      track.stop();
+    });
+
+    video.srcObject = null;
+  }
 }
 
 function getLabeledFaceDescriptions() {

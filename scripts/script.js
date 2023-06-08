@@ -28,6 +28,8 @@ closeIcon.addEventListener("click", () => {
     titleTag.value = descTag.value = "";
     popupBox.classList.remove("show");
     document.querySelector("body").style.overflow = "auto";
+
+    stopWebcam();
 });
 
 function showNotes() {
@@ -87,16 +89,17 @@ async function unlock(noteId, title, filterDesc) {
     await sleep(100);
     // Show Redacted Notes
     // Verify user
-    if(verifyUser()) {
-        addBtn.hidden = false;
-        // Show plain notes (unredacted) once user is verified
-        // Enable editing
+    verifyUser();
+    // if(verifyUser()) {
+    //     addBtn.hidden = false;
+    //     // Show plain notes (unredacted) once user is verified
+    //     // Enable editing
         
-    }
-    else {
-        alert("User not verified");
-        //closeIcon.click();
-    }
+    // }
+    // else {
+    //     alert("User not verified");
+    //     //closeIcon.click();
+    // }
 }
 
 function sleep(milliseconds) {  
@@ -112,19 +115,25 @@ function deleteNote(noteId) {
 }
 
 function verifyUser() {
-    let verifying = true;
-    var random_boolean = Math.random() < 0.5;
-    console.log(random_boolean);
-    // while(!verifying) {     
+    Promise.all([
+        faceapi.nets.ssdMobilenetv1.loadFromUri("./models"),
+        faceapi.nets.faceRecognitionNet.loadFromUri("./models"),
+        faceapi.nets.faceLandmark68Net.loadFromUri("./models"),
+      ]).then(startWebcam).then(getLabeledFaceDescriptions);
+
+    // let verifying = true;
+    // var random_boolean = Math.random() < 0.5;
+    // console.log(random_boolean);
+    // // while(!verifying) {     
+    // // }
+    // if(!random_boolean) {
+    //     // alert("User not verified");
+    //     return false;
     // }
-    if(!random_boolean) {
-        // alert("User not verified");
-        return false;
-    }
-    else{
-        // alert("User verified");
-        return true;
-    }
+    // else{
+    //     // alert("User verified");
+    //     return true;
+    // }
 }
 
 function redact(noteId) {}

@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Iconscout Link For Icons -->
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <script defer src="./scripts/face-api.min.js"></script>
+    <script defer src="./scripts/script2.js"></script>
+    <script defer src="./scripts/script.js"></script>
   </head>
   <body>
     <div class="popup-box">
@@ -26,7 +29,7 @@
               <textarea spellcheck="false"></textarea>
             </div>
             <div class="user-cam-view">
-                Cam view
+              <video id="video" width="200" height="200" autoplay muted></video>
             </div>
             <button id="note-popup-btn"></button>
           </form>
@@ -40,7 +43,5 @@
       </li>
     </div>
 
-    <script src="./scripts/script.js"></script>
-    
   </body>
 </html>

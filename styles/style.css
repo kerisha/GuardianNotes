@@ -243,4 +243,7 @@ form button{
   .bottom-content .settings i{
     font-size: 17px;
   }
+  video #video {
+    text-align: center;
+  }
 }
