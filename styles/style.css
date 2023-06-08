@@ -230,6 +230,13 @@ form button{
   border-radius: 4px;
   background: #6A93F8;
 }
+.user-cam-view {
+  text-align: center;
+}
+
+#user-result {
+  text-align: center;
+}
 
 @media (max-width: 660px){
   .wrapper{
@@ -242,8 +249,5 @@ form button{
   }
   .bottom-content .settings i{
     font-size: 17px;
-  }
-  video #video {
-    text-align: center;
   }
 }
