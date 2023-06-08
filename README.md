@@ -1,5 +1,5 @@
 # 📗 Guardian Notes
-A secure notes app
+A secure notes/ memo/ journal app
 
 - Add short notes
 - Choose different colors for notes
