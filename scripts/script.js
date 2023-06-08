@@ -280,6 +280,9 @@ video.addEventListener("play", async () => {
                 closeIcon.click();
                 alert("Unauthorized user. Please try again.");
             }
+            else {
+                // Reveal the note!
+            }
             timer = 0;
         }
     }, 100);
