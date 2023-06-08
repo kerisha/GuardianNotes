@@ -9,15 +9,21 @@ const userCamView = document.querySelector(".user-cam-view");
 const video = document.getElementById("video");
 const userText = document.querySelector("#user-result");
 
+let notedId = 0;
+
 
 const months = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"];
 const notes = JSON.parse(localStorage.getItem("notes") || "[]");
 const notes_redacted = JSON.parse(localStorage.getItem("notes_redacted") || "[]");
 let isUpdate = false, updateId;
+let unlocking, editing = false;
 
 addBox.addEventListener("click", () => {
+    userText.textContent = "";
     addBtn.hidden = false;
+    descTag.readOnly = false;
+    titleTag.readOnly = false;
     userCamView.hidden = true;
     popupTitle.innerText = "Add a new Note";
     addBtn.innerText = "Add Note";
@@ -36,29 +42,34 @@ closeIcon.addEventListener("click", () => {
 });
 
 function showNotes() {
-    if (!notes) return;
+    if (!notes_redacted) return;
     document.querySelectorAll(".note").forEach(li => li.remove());
-    notes.forEach((note, id) => {
-        let filterDesc = note.description.replaceAll("\n", '<br/>');
-        let liTag = `<li class="note">
-                        <div class="details">
-                            <p>${note.title}</p>
-                            <span>${filterDesc}</span>
-                        </div>
-                        <div class="bottom-content">
-                            <span>${note.date}</span>
-                            <div class="settings">
-                                <i onclick="showMenu(this)" class="uil uil-ellipsis-h"></i>
-                                <ul class="menu">
-                                    <li onclick="deleteNote(${id})"><i class="uil uil-trash"></i>Delete</li>
-                                    <li onclick="unlock(${id}, '${note.title}', '${filterDesc}')"><i class="uil uil-lock-open-alt"></i>Unlock</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </li>`;
-        addBox.insertAdjacentHTML("afterend", liTag);
+    notes_redacted.forEach((note, id) => {
+      let ogDesc = note.description.replaceAll("\n", '<br/>');
+      let filterDesc = note.description.replaceAll("\n", ' ');
+      // Escape HTML entities in filterDesc
+      let escapedFilterDesc = filterDesc.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  
+      let liTag = `<li class="note">
+                      <div class="details">
+                          <p>${note.title}</p>
+                          <span>${escapedFilterDesc}</span>
+                      </div>
+                      <div class="bottom-content">
+                          <span>${note.date}</span>
+                          <div class="settings">
+                              <i onclick="showMenu(this)" class="uil uil-ellipsis-h"></i>
+                              <ul class="menu">
+                                  <li onclick="updateNote(${id}, '${note.title}', '${filterDesc}')"><i class="uil uil-pen"></i>Edit</li>
+                                  <li onclick="unlock(${id}, '${note.title}', '${ogDesc}')"><i class="uil uil-lock-open-alt"></i>Unlock</li>
+                                  <li onclick="deleteNote(${id})"><i class="uil uil-trash"></i>Delete</li>
+                              </ul>
+                          </div>
+                      </div>
+                  </li>`;
+      addBox.insertAdjacentHTML("afterend", liTag);
     });
-}
+  }
 showNotes();
 
 function showMenu(elem) {
@@ -72,7 +83,6 @@ function showMenu(elem) {
 
 function lock(noteId) {
     notes[noteId].locked = true;
-    // TODO: Redact note
     localStorage.setItem("notes", JSON.stringify(notes));
     showNotes();
 }
@@ -80,7 +90,7 @@ function lock(noteId) {
 async function unlock(noteId, title, filterDesc) {
     let description = filterDesc.replaceAll('<br/>', '\r\n');
     updateId = noteId;
-    isUpdate = true;
+    isUpdate = false;
     addBox.click();
     addBtn.hidden = true;
     userCamView.hidden = false;
@@ -93,16 +103,6 @@ async function unlock(noteId, title, filterDesc) {
     // Show Redacted Notes
     // Verify user
     verifyUser();
-    // if(verifyUser()) {
-    //     addBtn.hidden = false;
-    //     // Show plain notes (unredacted) once user is verified
-    //     // Enable editing
-
-    // }
-    // else {
-    //     alert("User not verified");
-    //     //closeIcon.click();
-    // }
 }
 
 function sleep(milliseconds) {
@@ -123,65 +123,57 @@ function verifyUser() {
         faceapi.nets.faceRecognitionNet.loadFromUri("./models"),
         faceapi.nets.faceLandmark68Net.loadFromUri("./models"),
     ]).then(startWebcam).then(getLabeledFaceDescriptions);
-
-    // let verifying = true;
-    // var random_boolean = Math.random() < 0.5;
-    // console.log(random_boolean);
-    // // while(!verifying) {     
-    // // }
-    // if(!random_boolean) {
-    //     // alert("User not verified");
-    //     return false;
-    // }
-    // else{
-    //     // alert("User verified");
-    //     return true;
-    // }
 }
-
-function redact(noteId) { }
 
 function redactAll() { }
 
-function updateNote(noteId, title, filterDesc) {
-    // Get note
-    let note = notes[noteId];
-    if (!note.locked) {
-        let description = filterDesc.replaceAll('<br/>', '\r\n');
-        updateId = noteId;
-        isUpdate = true;
-        addBox.click();
-        addBtn.hidden = false;
-        userCamView.hidden = false;
-        titleTag.value = title;
-        descTag.value = description;
-        popupTitle.innerText = "Update Note";
-        addBtn.innerText = "Update Note";
-    }
-    else {
-        alert("This note is locked. Please unlock it to edit.");
-    }
+function canUpdate(noteId) {
+    updateId = noteId;
+    verifyUser();
 }
 
-addBtn.addEventListener("click", e => {
+async function updateNote(noteId, title, filterDesc) {
+    descTag.readOnly = true;
+    titleTag.readOnly = true;
+    let description = filterDesc.replaceAll('<br/>', '\r\n');
+    updateId = noteId;
+    isUpdate = true;
+    addBox.click();
+    addBtn.hidden = false;
+    userCamView.hidden = false;
+    titleTag.value = title;
+    descTag.value = description;
+    popupTitle.innerText = "Update Note";
+    addBtn.innerText = "Update Note";
+    await sleep(100);
+    verifyUser();
+}
+
+addBtn.addEventListener("click", async e => {
+    stopWebcam();
     e.preventDefault();
     let title = titleTag.value.trim(),
         description = descTag.value.trim();
 
     if (title || description) {
+        let redacted = await redact(description);
+        redacted = redacted.result.redacted_data;
         let currentDate = new Date(),
             month = months[currentDate.getMonth()],
             day = currentDate.getDate(),
             year = currentDate.getFullYear();
-
         let noteInfo = { title, description, date: `${month} ${day}, ${year}`, locked: false }
+        let redactedNoteInfo = { title, description: redacted, date: `${month} ${day}, ${year}`, locked: false };
         if (!isUpdate) {
             notes.push(noteInfo);
+            notes_redacted.push(redactedNoteInfo);
         } else {
             isUpdate = false;
             notes[updateId] = noteInfo;
+            notes_redacted[updateId] = redactedNoteInfo;
         }
         localStorage.setItem("notes", JSON.stringify(notes));
+        localStorage.setItem("notes_redacted", JSON.stringify(notes_redacted));
         showNotes();
         closeIcon.click();
     }
@@ -247,7 +239,6 @@ video.addEventListener("play", async () => {
     const displaySize = { width: video.width, height: video.height };
     faceapi.matchDimensions(canvas, displaySize);
 
-    let timer = 0;
     setInterval(async () => {
         const detections = await faceapi
             .detectAllFaces(video)
@@ -265,25 +256,40 @@ video.addEventListener("play", async () => {
         // Results for matching faces
         results.forEach((result, i) => {
             result = result.toString().split(" ")[0];
-            // Kerisha can be stored in a Pangea Vault
-            if (result == "Kerisha") {
+            if (result === config.validUser) {
                 validUser = true;
                 userText.textContent = result;
             }
         });
-        if(!validUser) {
-            userText.textContent = "Unauthorized User";
-        }
-        timer++;
-        if (timer == 30) {
+        if(!isUpdate){
+            descTag.readOnly = true;
+            titleTag.readOnly = true;
+            if(!validUser) {
+                userText.textContent = "Unauthorized User";
+            }
             if (!validUser) {
-                closeIcon.click();
-                alert("Unauthorized user. Please try again.");
+                descTag.value = notes_redacted[updateId].description;
             }
             else {
                 // Reveal the note!
+                descTag.value = notes[updateId].description;
             }
-            timer = 0;
+        }
+        else {
+            if(validUser) {
+                alert("User verified. You may now update the note.");
+                //stopWebcam();
+                descTag.readOnly = false;
+                titleTag.readOnly = false;
+                let note = notes[updateId];
+                titleTag.value = note.title;
+                descTag.value = note.description;
+                stopWebcam();
+            }
+            else {
+                descTag.readOnly = true;
+                titleTag.readOnly = true;
+            }
         }
     }, 100);
 });
