@@ -1,4 +1,5 @@
 let config = {
     redact_api_key : "",
-    validUser : "",      
+    validUser : "",
+    audit_api_key : ""
 }

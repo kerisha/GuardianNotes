@@ -70,6 +70,7 @@ Temporary Items
 # Domain specific file
 /labels/Kerisha
 /scripts/config.js
+/notifier/config.js
 
 
 # Node

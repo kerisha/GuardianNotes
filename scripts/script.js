@@ -69,7 +69,7 @@ function showNotes() {
                   </li>`;
       addBox.insertAdjacentHTML("afterend", liTag);
     });
-  }
+}
 showNotes();
 
 function showMenu(elem) {
@@ -97,8 +97,7 @@ async function unlock(noteId, title, filterDesc) {
     titleTag.value = title;
     // Redacted content should initially be shown
     descTag.value = description;
-    popupTitle.innerText = "Update Note";
-    addBtn.innerText = "Update Note";
+    popupTitle.innerText = "Note";
     await sleep(100);
     // Show Redacted Notes
     // Verify user
@@ -211,7 +210,7 @@ function stopWebcam() {
 }
 
 function getLabeledFaceDescriptions() {
-    const labels = ["Kerisha"];
+    const labels = [config.validUser];
     return Promise.all(
         labels.map(async (label) => {
             const descriptions = [];
@@ -239,6 +238,7 @@ video.addEventListener("play", async () => {
     const displaySize = { width: video.width, height: video.height };
     faceapi.matchDimensions(canvas, displaySize);
 
+    let timer = 0;
     setInterval(async () => {
         const detections = await faceapi
             .detectAllFaces(video)
@@ -266,9 +266,13 @@ video.addEventListener("play", async () => {
             titleTag.readOnly = true;
             if(!validUser) {
                 userText.textContent = "Unauthorized User";
-            }
-            if (!validUser) {
                 descTag.value = notes_redacted[updateId].description;
+                timer++;
+                if(timer >= 25) {
+                    audit_log("view-redacted", "unauth_user", "memo-view", "error", "Access to view memo denied: Unauthorized user attempted to view redacted note.", "web-view-memo");
+                    notifyUser(`Hi ${config.validUser}. Urgent: An unauthorized user has attempted to view a redacted note. Please check your device and account for any suspicious activity.`);
+                    timer = 0;
+                }
             }
             else {
                 // Reveal the note!
@@ -278,7 +282,6 @@ video.addEventListener("play", async () => {
         else {
             if(validUser) {
                 alert("User verified. You may now update the note.");
-                //stopWebcam();
                 descTag.readOnly = false;
                 titleTag.readOnly = false;
                 let note = notes[updateId];
@@ -287,6 +290,12 @@ video.addEventListener("play", async () => {
                 stopWebcam();
             }
             else {
+                timer++;
+                if(timer >= 25) {
+                    audit_log("edit-redacted", "unauth_user", "memo-edit", "error", "Access to edit memo denied: Unauthorized user attempted to view redacted note.", "web-view-memo");
+                    notifyUser(`Hi ${config.validUser}. Urgent: An unauthorized user has attempted to edit a redacted note. Please check your device and account for any suspicious activity.`);
+                    timer = 0;
+                }
                 descTag.readOnly = true;
                 titleTag.readOnly = true;
             }
