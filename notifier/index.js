@@ -1,11 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const config = require('./config.js');
+const axios = require('axios');
 
 const accountSid = config.whatsAppAccountSID;
 const authToken = config.whatsAppAuthToken;
 const client = require('twilio')(accountSid, authToken);
 
+// whatsapp devbox related. Needed a templated message from WhatsApp to get started
 let templateMessage = 'Your appointment is coming up on July 21 at 3PM';
 
 const app = express();
@@ -34,6 +36,7 @@ app.post('/notifyUser', (req, res) => {
     req.on('end', () => {
         console.log('Received POST data:', requestData);
         sendWhatsAppMessage(requestData);
+        sendMicrosoftTeamsMessage(requestData);
         res.status(200).send('Notification sent to user');
     });
 });
@@ -59,3 +62,18 @@ function sendWhatsAppMessage(message) {
         .then(message => console.log(message.sid))
         .catch(err => console.log(err));
 }
+
+async function sendMicrosoftTeamsMessage(message) {
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+  
+    try {
+      const response = await axios.post(config.microsoftTeamsUrl, message, {
+        headers: headers,
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }

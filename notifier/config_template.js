@@ -2,7 +2,8 @@ let config = {
     whatsAppAuthToken: "",
     whatsAppAccountSID : "",
     whatsAppNumber : "",
-    toNumber : "", 
+    toNumber : "",
+    microsoftTeamsUrl: ""
 }
 
 module.exports = config;
