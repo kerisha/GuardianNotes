@@ -274,84 +274,93 @@ video.addEventListener("play", async () => {
 
         const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
-        canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+        if(detections.length > 0) {
+            canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
 
-        const results = resizedDetections.map((d) => {
-            return faceMatcher.findBestMatch(d.descriptor);
-        });
-        var validUser = false;
-        // Results for matching faces
-        results.forEach((result, i) => {
-            result = result.toString().split(" ")[0];
-            if (result === config.validUser) {
-                validUser = true;
-                userText.textContent = result;
-            }
-        });
-        if (!isUpdate && !isDelete) {
-            descTag.readOnly = true;
-            titleTag.readOnly = true;
-            if (!validUser) {
-                userText.textContent = "Unauthorized User";
-                descTag.value = notes_redacted[currentNoteId].description;
-                timer++;
-                if (timer >= 50) {
-                    let noteTitle = "";
-                    if (currentNoteId > 0) {
-                        noteTitle = notes[currentNoteId].title;
-                    }
-                    audit_log("view-redacted", "unauth_user", "memo-view", "error", "Access to view memo denied: Unauthorized user attempted to view redacted note.", "web-view-memo");
-                    notifyUser(`Hi ${config.validUser}. Urgent: An unauthorized user has attempted to view a redacted note entitled '${noteTitle}'. Please check your device and account for any suspicious activity.`);
-                    timer = 0;
+            const results = resizedDetections.map((d) => {
+                return faceMatcher.findBestMatch(d.descriptor);
+            });
+            var validUser = false;
+            // Results for matching faces
+            results.forEach((result, i) => {
+                result = result.toString().split(" ")[0];
+                if (result === config.validUser) {
+                    validUser = true;
+                    userText.textContent = result;
                 }
-            }
-            else {
-                // Reveal the note!
-                descTag.value = notes[currentNoteId].description;
-            }
-        }
-        else if (isDelete) {
-            if (validUser) {
-                alert("User verified. Note is going to be deleted.");
-                deleteNote(currentNoteId);
-                closeIcon.click();
-            } else {
-                timer++;
-                if(timer >= 50) {
-                    let noteTitle = "";
-                    if (currentNoteId > 0) {
-                        noteTitle = notes[currentNoteId].title;
-                    }
-                    audit_log("delete-redacted", "unauth_user", "memo-delete", "error", "Access to delete memo denied: Unauthorized user attempted to delete redacted note.", "web-view-memo");
-                    notifyUser(`Hi ${config.validUser}. Urgent: An unauthorized user has attempted to delete a redacted note entitled '${noteTitle}'. Please check your device and account for any suspicious activity.`);
-                    timer = 0;
-                }
-            }
-        }
-        else {
-            if (validUser && isUpdate) {
-                alert("User verified. You may now update the note.");
-                descTag.readOnly = false;
-                titleTag.readOnly = false;
-                let note = notes[updateId];
-                titleTag.value = note.title;
-                descTag.value = note.description;
-                stopWebcam();
-            }
-            else {
-                timer++;
-                if (timer >= 50) {
-                    let noteTitle = "";
-                    if (currentNoteId > 0) {
-                        noteTitle = notes[currentNoteId].title;
-                    }
-                    audit_log("edit-redacted", "unauth_user", "memo-edit", "error", "Access to edit memo denied: Unauthorized user attempted to view redacted note.", "web-view-memo");
-                    notifyUser(`Hi ${config.validUser}. Urgent: An unauthorized user has attempted to edit a redacted note entitled '${noteTitle}'. Please check your device and account for any suspicious activity.`);
-                    timer = 0;
-                }
+            });
+            if (!isUpdate && !isDelete) {
                 descTag.readOnly = true;
                 titleTag.readOnly = true;
+                if (!validUser) {
+                    userText.textContent = "Unauthorized User";
+                    descTag.value = notes_redacted[currentNoteId].description;
+                    timer++;
+                    if (timer >= 35) {
+                        let noteTitle = "";
+                        if (currentNoteId > 0) {
+                            noteTitle = notes[currentNoteId].title;
+                        }
+                        audit_log("view-redacted", "unauth_user", "memo-view", "error", "Access to view memo denied: Unauthorized user attempted to view redacted note.", "web-view-memo");
+                        notifyUser(`Hi ${config.validUser}. Urgent: An unauthorized user has attempted to view a redacted note entitled '${noteTitle}'. Please check your device and account for any suspicious activity.`);
+                        timer = 0;
+                    }
+                }
+                else {
+                    // Reveal the note!
+                    descTag.value = notes[currentNoteId].description;
+                }
             }
+            else if (isDelete) {
+                if (validUser) {
+                    alert("User verified. Note is going to be deleted.");
+                    deleteNote(currentNoteId);
+                    closeIcon.click();
+                } else {
+                    timer++;
+                    if(timer >= 35) {
+                        let noteTitle = "";
+                        if (currentNoteId > 0) {
+                            noteTitle = notes[currentNoteId].title;
+                        }
+                        audit_log("delete-redacted", "unauth_user", "memo-delete", "error", "Access to delete memo denied: Unauthorized user attempted to delete redacted note.", "web-view-memo");
+                        notifyUser(`Hi ${config.validUser}. Urgent: An unauthorized user has attempted to delete a redacted note entitled '${noteTitle}'. Please check your device and account for any suspicious activity.`);
+                        timer = 0;
+                    }
+                }
+            }
+            else {
+                if (validUser && isUpdate) {
+                    alert("User verified. You may now update the note.");
+                    descTag.readOnly = false;
+                    titleTag.readOnly = false;
+                    let note = notes[updateId];
+                    titleTag.value = note.title;
+                    descTag.value = note.description;
+                    stopWebcam();
+                }
+                else {
+                    timer++;
+                    if (timer >= 35) {
+                        let noteTitle = "";
+                        if (currentNoteId > 0) {
+                            noteTitle = notes[currentNoteId].title;
+                        }
+                        audit_log("edit-redacted", "unauth_user", "memo-edit", "error", "Access to edit memo denied: Unauthorized user attempted to view redacted note.", "web-view-memo");
+                        notifyUser(`Hi ${config.validUser}. Urgent: An unauthorized user has attempted to edit a redacted note entitled '${noteTitle}'. Please check your device and account for any suspicious activity.`);
+                        timer = 0;
+                    }
+                    descTag.readOnly = true;
+                    titleTag.readOnly = true;
+                }
+            }
+        }
+        else{
+            userText.textContent = "No user detected";
+            descTag.readOnly = true;
+            titleTag.readOnly = true;
+            descTag.value = notes_redacted[currentNoteId].description;
+            timer = 0;
         }
     }, 100);
 });
