@@ -115,6 +115,8 @@ function deleteNote(noteId) {
     notes_redacted.splice(noteId, 1);
     localStorage.setItem("notes", JSON.stringify(notes));
     localStorage.setItem("notes_redacted", JSON.stringify(notes_redacted));
+    descTag.value = "";
+    titleTag.value = "";
     showNotes();
 }
 
@@ -146,6 +148,8 @@ async function updateNote(noteId, title, filterDesc) {
     userCamView.hidden = false;
     titleTag.value = title;
     descTag.value = description;
+    descTag.readOnly = true;
+    titleTag.readOnly = true;
     popupTitle.innerText = "Update Note";
     addBtn.innerText = "Update Note";
     await sleep(100);
@@ -291,7 +295,7 @@ video.addEventListener("play", async () => {
                 userText.textContent = "Unauthorized User";
                 descTag.value = notes_redacted[currentNoteId].description;
                 timer++;
-                if (timer >= 25) {
+                if (timer >= 50) {
                     let noteTitle = "";
                     if (currentNoteId > 0) {
                         noteTitle = notes[currentNoteId].title;
@@ -313,7 +317,7 @@ video.addEventListener("play", async () => {
                 closeIcon.click();
             } else {
                 timer++;
-                if(timer >= 25) {
+                if(timer >= 50) {
                     let noteTitle = "";
                     if (currentNoteId > 0) {
                         noteTitle = notes[currentNoteId].title;
@@ -336,7 +340,7 @@ video.addEventListener("play", async () => {
             }
             else {
                 timer++;
-                if (timer >= 25) {
+                if (timer >= 50) {
                     let noteTitle = "";
                     if (currentNoteId > 0) {
                         noteTitle = notes[currentNoteId].title;

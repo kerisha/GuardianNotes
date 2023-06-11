@@ -68,8 +68,8 @@ Temporary Items
 *.vsix
 
 # Domain specific file
-/labels/Kerisha
-/scripts/config.js
+/webapp/labels/Kerisha
+/webapp/scripts/config.js
 /notifier/config.js
 
 
