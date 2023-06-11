@@ -1,8 +1,8 @@
-# The Guardian (GuardianNotes) - Using AI and Pangea APIs
+# The Guardian - Using AI and Pangea APIs
 
 In this workflow, there are three applications working together to ensure the security and privacy of your confidential information. Let's dive into the function of each app:
 
-Web App: The web app is where you add, view, edit, and delete your confidential notes. It acts as the primary interface for managing your sensitive information. One of the key features of this app is its AI-powered webcam verification, which ensures that only authorized users can access the notes. This adds an extra layer of security, preventing unauthorized individuals from gaining access to your confidential data.
+Web App: The web app is where you add, view, edit, and delete your confidential data. It acts as the primary interface for managing your sensitive information. One of the key features of this app is its AI-powered webcam verification, which ensures that only authorized users can access the data. This adds an extra layer of security, preventing unauthorized individuals from gaining access to your confidential data.
 
 Backend Notification App: This app comes into play when an unauthorized user attempts to access your confidential data. If the webcam verification fails to match the user's identity, the backend notification app is triggered. It swiftly sends out notifications to you through different channels, such as WhatsApp and Microsoft Teams. This real-time alert allows you to take immediate action and be aware of any potential security breaches.
 
@@ -16,11 +16,11 @@ Timely Alerts: The backend notification app promptly sends out notifications to 
 
 Proactive Insights: The GPT app offers you the ability to monitor and analyze your account activity comprehensively. By logging into the portal, you gain valuable insights into your usage patterns and receive updates on any breaches that might have occurred. This proactive approach allows you to stay one step ahead and take preventive measures to enhance the security of your confidential information.
 
-Empowering Control: The entire workflow empowers you with control over your data. You have the ability to add, edit, or delete notes securely using AI-powered webcam verification. Additionally, by accessing the GPT portal, you have a centralized location to manage and monitor your account, giving you full control and visibility over your sensitive information.
+Empowering Control: The entire workflow empowers you with control over your data. You have the ability to add, edit, or delete data securely using AI-powered webcam verification. Additionally, by accessing the GPT portal, you have a centralized location to manage and monitor your account, giving you full control and visibility over your sensitive information.
 
 In summary, this application workflow provides a robust and comprehensive solution to safeguard your confidential data. By combining cutting-edge security measures, real-time notifications, and insightful analysis, it ensures your peace of mind and empowers you with the necessary tools to maintain the privacy of your information. With this app, you can confidently store your sensitive data, knowing that it is protected and monitored effectively.
 
-# 📗🔐 Guardian Notes App 📗🔐
+# 📗🔐 Guardian App 📗🔐
 
 ### Tech
 
@@ -28,7 +28,7 @@ Javascript web app
 
 ## How is Pangea APIs Used?
 
-- Redact: When a note is created, sensitive information are redacted based on rules set in Pangea's console.
+- Redact: When a data is added, sensitive information are redacted based on rules set in Pangea's console.
 - Audit Log: Logs generated for user events: login, unathorized access to content, unathorized tampering
 
 ## To run:
@@ -38,7 +38,7 @@ Javascript web app
 - Navigate to login.html file and open in browser
 - Right click, open with Live Server
 - Login (creds: admin for username and password)
-- Use App (Add a note and proceed)
+- Use App (Add a data and proceed)
 
 Note: Copy config_template.js and paste into a new file called config.js.
 Place your environment specific configs in the file.
