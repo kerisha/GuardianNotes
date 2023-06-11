@@ -239,3 +239,26 @@ _storage_emulator
 
 # Dev tool directories
 /devTools/
+
+# Benchmarking
+benchmarks/graphs
+
+# ignore additional files using core.excludesFile
+# https://git-scm.com/docs/gitignore
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# Parcel Build
+dist
+
+# Domain specific
+/server/config.js
