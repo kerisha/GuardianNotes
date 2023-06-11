@@ -29,7 +29,6 @@ Javascript web app
 ## How is Pangea APIs Used?
 
 - Redact: When a note is created, sensitive information are redacted based on rules set in Pangea's console.
-- Rules enabled for redacting are: IP addresses, email addresses, credit card number, monetary values, person names
 - Audit Log: Logs generated for user events: login, unathorized access to content, unathorized tampering
 
 ## To run:
