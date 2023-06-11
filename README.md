@@ -74,7 +74,7 @@ This is needed to get the app to run.
 
 ## How is Pangea APIs used?
 
-Bot reaches out to Pangea's Audit Log service and updates the user on the events surrounding account activity and security breeches. Bot also gives security recommendations based on what it knows from the logs.
+Audit Log: Bot reaches out to Pangea's Audit Log service and updates the user on the events surrounding account activity and security breeches. Bot also gives security recommendations based on what it knows from the logs.
 
 ## Process Environment Variable
 
