@@ -14,9 +14,10 @@ const months = ["January", "February", "March", "April", "May", "June", "July",
 const notes = JSON.parse(localStorage.getItem("notes") || "[]");
 const notes_redacted = JSON.parse(localStorage.getItem("notes_redacted") || "[]");
 let isUpdate = false, updateId;
-let unlocking, editing = false;
 let currentNoteId = 0;
 let isDelete = false;
+let clickSource = "user";
+let isNewNote = false;
 
 addBox.addEventListener("click", () => {
     userText.textContent = "";
@@ -29,16 +30,23 @@ addBox.addEventListener("click", () => {
     popupBox.classList.add("show");
     document.querySelector("body").style.overflow = "hidden";
     if (window.innerWidth > 660) titleTag.focus();
+    if(clickSource == "user"){
+        isNewNote = true;
+        titleTag.value = descTag.value = "";
+        descTag.readOnly = titleTag.readOnly = true;
+        userCamView.hidden = false;
+        verifyUser();
+    }
 });
 
 closeIcon.addEventListener("click", () => {
+    clickSource = "user";
     currentNoteId = 0;
     isDelete = false;
     isUpdate = false;
     titleTag.value = descTag.value = "";
     popupBox.classList.remove("show");
     document.querySelector("body").style.overflow = "auto";
-
     stopWebcam();
 });
 
@@ -92,7 +100,10 @@ async function unlock(noteId, title, filterDesc) {
     let description = filterDesc.replaceAll('<br/>', '\r\n');
     updateId = noteId;
     isUpdate = false;
+    isDelete = false;
+    isNewNote = false;
     currentNoteId = noteId;
+    clickSource = "program";
     addBox.click();
     addBtn.hidden = true;
     userCamView.hidden = false;
@@ -111,6 +122,8 @@ function sleep(milliseconds) {
 }
 
 function deleteNote(noteId) {
+    isUpdate = false;
+    isNewNote = false;
     notes.splice(noteId, 1);
     notes_redacted.splice(noteId, 1);
     localStorage.setItem("notes", JSON.stringify(notes));
@@ -143,6 +156,7 @@ async function updateNote(noteId, title, filterDesc) {
     updateId = noteId;
     currentNoteId = noteId;
     isUpdate = true;
+    clickSource = "program";
     addBox.click();
     addBtn.hidden = false;
     userCamView.hidden = false;
@@ -163,6 +177,7 @@ async function deleteNoteAttempt(noteId, title, filterDesc) {
     updateId = noteId;
     currentNoteId = noteId;
     isDelete = true;
+    clickSource = "program";
     addBox.click();
     addBtn.hidden = true;
     userCamView.hidden = false;
@@ -289,7 +304,7 @@ video.addEventListener("play", async () => {
                     userText.textContent = result;
                 }
             });
-            if (!isUpdate && !isDelete) {
+            if (!isUpdate && !isDelete && !isNewNote) {
                 descTag.readOnly = true;
                 titleTag.readOnly = true;
                 if (!validUser) {
@@ -309,6 +324,7 @@ video.addEventListener("play", async () => {
                 else {
                     // Reveal the note!
                     descTag.value = notes[currentNoteId].description;
+                    timer = 0;
                 }
             }
             else if (isDelete) {
@@ -329,8 +345,9 @@ video.addEventListener("play", async () => {
                     }
                 }
             }
-            else {
-                if (validUser && isUpdate) {
+            else if(isUpdate) {
+                if (validUser && timer < 1) {
+                    timer = 0;
                     alert("User verified. You may now update the note.");
                     descTag.readOnly = false;
                     titleTag.readOnly = false;
@@ -354,12 +371,34 @@ video.addEventListener("play", async () => {
                     titleTag.readOnly = true;
                 }
             }
+            else if (isNewNote) {
+                descTag.value = "";
+                if (validUser) {
+                    alert("User verified. You may now create a new note.");
+                    descTag.readOnly = false;
+                    titleTag.readOnly = false;
+                    timer = 0;
+                    stopWebcam();
+                }
+                else {
+                    timer++;
+                    if (timer >= 35) {
+                        if (currentNoteId > 0) {
+                            noteTitle = notes[currentNoteId].title;
+                        }
+                        audit_log("create-redacted", "unauth_user", "memo-create", "error", "Access to create memo denied: Unauthorized user attempted to create a note.", "web-view-memo");
+                        notifyUser(`Hi ${config.validUser}. Urgent: An unauthorized user has attempted to create a new note'. Please check your device and account for any suspicious activity.`);
+                        timer = 0;
+                    }
+                    descTag.readOnly = true;
+                    titleTag.readOnly = true;
+                }
+            }
         }
         else{
             userText.textContent = "No user detected";
             descTag.readOnly = true;
             titleTag.readOnly = true;
-            descTag.value = notes_redacted[currentNoteId].description;
             timer = 0;
         }
     }, 100);
