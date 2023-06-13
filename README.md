@@ -134,8 +134,8 @@ Set OPENAI_API_KEY to your Open API Key
 
 Terminal: export OPENAI_API_KEY={key}
 
-Verify set: echo $OPENAI_API_KEY {{br}}
-Key should be displayed {{br}}
+Verify set: echo $OPENAI_API_KEY </br>
+Key should be displayed </br>
 
 #### Other configs
 
@@ -161,7 +161,7 @@ Run the app with a js bundler
 
 Example: Parcel
 
-Npm command: npm install parcel {{br}}
+Npm command: npm install parcel </br>
 Parcel Command: parcel index.html
 
 Note: Ensure server is running and Client is pointing to server. Update serverUrl in the App.js file
