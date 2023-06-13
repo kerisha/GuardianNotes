@@ -20,7 +20,7 @@ Empowering Control: The entire workflow empowers you with control over your data
 
 In summary, this application workflow provides a robust and comprehensive solution to safeguard your confidential data. By combining cutting-edge security measures, real-time notifications, and insightful analysis, it ensures your peace of mind and empowers you with the necessary tools to maintain the privacy of your information. With this app, you can confidently store your sensitive data, knowing that it is protected and monitored effectively.
 
-# 📗🔐 Guardian App 📗🔐 (webapp)
+# 📗🔐 Guardian App 📗🔐 (/webapp)
 
 ## Tech
 
@@ -36,10 +36,17 @@ Code usage: scripts/script.js
 
 ## Configuration
 
-Note: Copy config_template.js and paste into a new file called config.js.
+Note: Copy config_template.js (/scripts/config_template.js) and paste into a new file called config.js.
 Place your environment specific configs in the config.js file.
 Save the file.
 This is needed to get the app to run.
+
+let config = {
+redact_api_key : "<PangeaAPIKey>",
+validUser : "<AuthorizedUser>",
+audit_api_key : "<PangeaAPIKey>",
+notifierUrl : "<NotifierAppUrl>",
+}
 
 ## To run:
 
@@ -62,11 +69,13 @@ Train the app to recognize you:
 - In the valid user subfolder, add images of the authorized user and name them in incrementing integers starting from 1. For example: 1.png, 2.png, etc ...
 - That's it, when you run the app, it will handle the processing
 
-# 📢 Notifier App 📢 (notifier)
+# 📢 Notifier App 📢 (/notifier)
 
 ## Tech
 
 Nodejs Express app
+
+NB: This app makes an API call to another App - teamsbot/SnooperAlert
 
 ## Configuration
 
@@ -75,6 +84,14 @@ Place your environment specific configs in the config.js file.
 Save the file.
 This is needed to get the app to run.
 
+config = {
+whatsAppAuthToken: "<TwilioAccountWhatsAppToken>",
+whatsAppAccountSID : "<TwilioAccountSID>",
+whatsAppNumber : "<TwilioWhatsAppNumber>",
+toNumber : "<WhatsAppDestinationNumber>",
+microsoftTeamsUrl: "<TeamsBotSnooperAlertUrl>"
+}
+
 ## To run:
 
 Navigate to the folder (notifier) in the terminal and execute:
@@ -82,7 +99,23 @@ Navigate to the folder (notifier) in the terminal and execute:
 
 The notifier app should be started locally on port 3009
 
-# 🤖 Pangea GPT App 🤖 (pangeagpt-server and pangeagpt-client)
+# 🦾 Teams bot (/teams-bot/SnooperAlert) 🦾
+
+Teams bot responsible for sending out notifications to the authorized user via Microsoft Teams
+
+## Dependencies
+
+- VS Code
+- Teams Toolkit Extension for VS Code
+
+## To run
+
+- On the sidebar, select the Debug icon to open the RUN AND DEBUG panel.
+- On the RUN AND DEBUG panel, select either Chrome or Edge in the dropdown list box as the browser that you want to use to debug your bot. Then select the Play button (or select the F5 key) to start the debug session.
+- In the installation dialog, select the Add button to install the app as a personal app.
+- The endpoint URL for the bot will be `https://localhost:3978/api/notification`
+
+# 🤖 Pangea GPT App 🤖 (/pangeagpt-server and /pangeagpt-client)
 
 ## How is Pangea APIs used?
 
@@ -102,7 +135,7 @@ Key should be displayed <br>
 
 The server needs the above in order to successfully make requests to Open AI
 
-## Server (pangeagpt-server)
+## Server (/pangeagpt-server)
 
 ### Configuration
 
@@ -111,13 +144,18 @@ Place your environment specific configs in the config.js file.
 Save the file.
 This is needed to get the app to run.
 
+config = {
+audit_api_key: "<PangeaAuditLogAPIKey>",
+domain: "<PangeaDomain>",
+}
+
 To run:
 
 1. node server.js
    OR
 2. npm start
 
-## Client (pangeagpt-client)
+## Client (/pangeagpt-client)
 
 Run the app with a js bundler
 
