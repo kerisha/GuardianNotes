@@ -117,7 +117,7 @@ The notifier app should be started locally on port 3009
 
 # 🤖 Pangea GPT App 🤖 (/pangeagpt-server and /pangeagpt-client)
 
-## How is Pangea APIs used?
+## How are Pangea APIs used?
 
 Audit Log: Bot reaches out to Pangea's Audit Log service and updates the user on the events surrounding account activity and security breeches. Bot also gives security recommendations based on what it knows from the logs.
 
