@@ -157,6 +157,8 @@ To run:
 
 ## Client (/pangeagpt-client)
 
+### To run:
+
 Run the app with a js bundler
 
 Example: Parcel
