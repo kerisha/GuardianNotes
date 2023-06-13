@@ -31,7 +31,7 @@ Javascript web app
 - Redact: When a data is added, sensitive information are redacted based on rules set in Pangea's console.
 - Audit Log: Logs generated for user events: login, unauthorized access to content, unauthorized tampering
 
-Defined in code: scripts/pangea-apis.js
+Defined in code: scripts/pangea-apis.js </br>
 Code usage: scripts/script.js
 
 ## Configuration
@@ -121,7 +121,7 @@ The notifier app should be started locally on port 3009
 
 Audit Log: Bot reaches out to Pangea's Audit Log service and updates the user on the events surrounding account activity and security breeches. Bot also gives security recommendations based on what it knows from the logs.
 
-Defined in code: pangeagpt-server/server.js
+Defined in code: pangeagpt-server/server.js </br>
 Code usage: pangeagpt-server/server.js
 
 ## Server (/pangeagpt-server)
