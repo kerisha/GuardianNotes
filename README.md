@@ -1,12 +1,12 @@
 # The Guardian - Using AI and Pangea APIs
 
-In this workflow, there are three applications working together to ensure the security and privacy of your confidential information. Let's dive into the function of each app:
+In this workflow, there are five applications working together to ensure the security and privacy of your confidential information. Let's dive into the function of each app:
 
-Web App: The web app is where you add, view, edit, and delete your confidential data. It acts as the primary interface for managing your sensitive information. One of the key features of this app is its AI-powered webcam verification, which ensures that only authorized users can access the data. This adds an extra layer of security, preventing unauthorized individuals from gaining access to your confidential data.
+Web App (first): The web app is where you add, view, edit, and delete your confidential data. It acts as the primary interface for managing your sensitive information. One of the key features of this app is its AI-powered webcam verification, which ensures that only authorized users can access the data. This adds an extra layer of security, preventing unauthorized individuals from gaining access to your confidential data.
 
-Backend Notification App: This app comes into play when an unauthorized user attempts to access your confidential data. If the webcam verification fails to match the user's identity, the backend notification app is triggered. It swiftly sends out notifications to you through different channels, such as WhatsApp and Microsoft Teams. This real-time alert allows you to take immediate action and be aware of any potential security breaches.
+Backend Notification App (second): This app comes into play when an unauthorized user attempts to access your confidential data. If the webcam verification fails to match the user's identity, the backend notification app is triggered. It swiftly sends out notifications to you through different channels, such as WhatsApp and Microsoft Teams (third - another application in the solution). This real-time alert allows you to take immediate action and be aware of any potential security breaches.
 
-GPT App: The GPT app is designed to analyze your user data and provide you with valuable insights and activity updates. It not only helps you monitor your account but also detects and reports any security breaches that might occur. By logging into the GPT portal, you can access detailed information about the security incidents, enabling you to understand the nature of the breach and take appropriate measures to safeguard your confidential data in the future.
+GPT App: The GPT app is designed to analyze your user data and provide you with valuable insights and activity updates. It not only helps you monitor your account but also detects and reports any security breaches that might occur. By logging into the GPT portal, you can access detailed information about the security incidents, enabling you to understand the nature of the breach and take appropriate measures to safeguard your confidential data in the future. It consists of two application: the client (fourth) and the server (fifth).
 
 # App Benefits
 
@@ -41,21 +41,12 @@ Place your environment specific configs in the config.js file.
 Save the file.
 This is needed to get the app to run.
 
-let config = {
-redact_api_key : "<PangeaAPIKey>",
-validUser : "<AuthorizedUser>",
-audit_api_key : "<PangeaAPIKey>",
-notifierUrl : "<NotifierAppUrl>",
+config = {
+redact_api_key : "{{PangeaAPIKey}}",
+validUser : "{{AuthorizedUser}}",
+audit_api_key : "{{PangeaAPIKey}}",
+notifierUrl : "{{NotifierAppUrl}}",
 }
-
-## To run:
-
-- Go to the webapp folder
-- Download `Live Server` for VS code
-- Navigate to login.html file and open in browser
-- Right click, open with Live Server
-- Login (creds: username: kerisha, password: admin)
-- Use App (Add data and proceed)
 
 ## AI Model
 
@@ -69,35 +60,14 @@ Train the app to recognize you:
 - In the valid user subfolder, add images of the authorized user and name them in incrementing integers starting from 1. For example: 1.png, 2.png, etc ...
 - That's it, when you run the app, it will handle the processing
 
-# 📢 Notifier App 📢 (/notifier)
-
-## Tech
-
-Nodejs Express app
-
-NB: This app makes an API call to another App - teamsbot/SnooperAlert
-
-## Configuration
-
-Note: Copy config_template.js and paste into a new file called config.js.
-Place your environment specific configs in the config.js file.
-Save the file.
-This is needed to get the app to run.
-
-config = {
-whatsAppAuthToken: "<TwilioAccountWhatsAppToken>",
-whatsAppAccountSID : "<TwilioAccountSID>",
-whatsAppNumber : "<TwilioWhatsAppNumber>",
-toNumber : "<WhatsAppDestinationNumber>",
-microsoftTeamsUrl: "<TeamsBotSnooperAlertUrl>"
-}
-
 ## To run:
 
-Navigate to the folder (notifier) in the terminal and execute:
-`npm start`
-
-The notifier app should be started locally on port 3009
+- Go to the webapp folder
+- Download `Live Server` for VS code
+- Navigate to login.html file and open in browser
+- Right click, open with Live Server
+- Login (creds: username: kerisha, password: admin)
+- Use App (Add data and proceed)
 
 # 🦾 Teams bot (/teams-bot/SnooperAlert) 🦾
 
@@ -115,6 +85,36 @@ Teams bot responsible for sending out notifications to the authorized user via M
 - In the installation dialog, select the Add button to install the app as a personal app.
 - The endpoint URL for the bot will be `https://localhost:3978/api/notification`
 
+# 📢 Notifier App 📢 (/notifier)
+
+## Tech
+
+Nodejs Express app
+
+NB: This app makes an API call to another App - teamsbot/SnooperAlert
+
+## Configuration
+
+Note: Copy config_template.js and paste into a new file called config.js.
+Place your environment specific configs in the config.js file.
+Save the file.
+This is needed to get the app to run.
+
+config = {
+whatsAppAuthToken: "{{TwilioAccountWhatsAppToken}}",
+whatsAppAccountSID : "{{TwilioAccountSID}}",
+whatsAppNumber : "{{TwilioWhatsAppNumber}}",
+toNumber : "{{WhatsAppDestinationNumber}}",
+microsoftTeamsUrl: "{{TeamsBotSnooperAlertUrl}}"
+}
+
+## To run:
+
+Navigate to the folder (notifier) in the terminal and execute:
+`npm start`
+
+The notifier app should be started locally on port 3009
+
 # 🤖 Pangea GPT App 🤖 (/pangeagpt-server and /pangeagpt-client)
 
 ## How is Pangea APIs used?
@@ -124,20 +124,20 @@ Audit Log: Bot reaches out to Pangea's Audit Log service and updates the user on
 Defined in code: pangeagpt-server/server.js
 Code usage: pangeagpt-server/server.js
 
-## Process Environment Variable
+## Server (/pangeagpt-server)
+
+### Configuration
+
+#### Process Environment Variable
 
 Set OPENAI_API_KEY to your Open API Key
 
 Terminal: export OPENAI_API_KEY={key}
 
-Verify set: echo $OPENAI_API_KEY <br>
-Key should be displayed <br>
+Verify set: echo $OPENAI_API_KEY {{br}}
+Key should be displayed {{br}}
 
-The server needs the above in order to successfully make requests to Open AI
-
-## Server (/pangeagpt-server)
-
-### Configuration
+#### Other configs
 
 Note: Copy config_template.js and paste into a new file called config.js.
 Place your environment specific configs in the config.js file.
@@ -145,8 +145,8 @@ Save the file.
 This is needed to get the app to run.
 
 config = {
-audit_api_key: "<PangeaAuditLogAPIKey>",
-domain: "<PangeaDomain>",
+audit_api_key: "{{PangeaAuditLogAPIKey}}",
+domain: "{{PangeaDomain}}",
 }
 
 To run:
@@ -161,7 +161,7 @@ Run the app with a js bundler
 
 Example: Parcel
 
-Npm command: npm install parcel <br>
+Npm command: npm install parcel {{br}}
 Parcel Command: parcel index.html
 
 Note: Ensure server is running and Client is pointing to server. Update serverUrl in the App.js file
