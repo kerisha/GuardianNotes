@@ -61,6 +61,8 @@ Temporary Items
 !.vscode/extensions.json
 !.vscode/*.code-snippets
 
+/teams-bot/SnooperAlert/.vscode/*
+
 # Local History for Visual Studio Code
 .history/
 
@@ -71,6 +73,7 @@ Temporary Items
 /webapp/labels/Kerisha
 /webapp/scripts/config.js
 /notifier/config.js
+/pangeagpt-server/config.js
 
 
 # Node
@@ -206,6 +209,10 @@ dist
 env/.env.*.user
 env/.env.local
 appPackage/build
+
+/teams-bot/SnooperAlert/env/.env.*.user
+/teams-bot/SnooperAlert/env/.env.local
+/teams-bot/SnooperAlert/appPackage/build
 
 # Dependency directories
 node_modules
