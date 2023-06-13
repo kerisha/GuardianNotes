@@ -1,4 +1,4 @@
-# The Guardian - Using AI and Pangea APIs
+# The Guardian - Using AI and [Pangea](https://pangea.cloud/) APIs
 
 In this workflow, there are five applications working together to ensure the security and privacy of your confidential information. Let's dive into the function of each app:
 
