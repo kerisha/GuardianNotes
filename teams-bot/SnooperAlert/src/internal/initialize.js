@@ -1,5 +1,5 @@
-const { BotBuilderCloudAdapter } = require("@microsoft/teamsfx");
-const ConversationBot = BotBuilderCloudAdapter.ConversationBot;
+const { AgentBuilderCloudAdapter } = require("@microsoft/teamsfx");
+const ConversationBot = AgentBuilderCloudAdapter.ConversationBot;
 const config = require("./config");
 
 // Create bot.
