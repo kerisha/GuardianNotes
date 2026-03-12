@@ -1,4 +1,4 @@
-const { Configuration, OpenAIApi } = require("openai");
+const { OpenAI } = require("openai");
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -25,10 +25,9 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-const configuration = new Configuration({
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-const openai = new OpenAIApi(configuration);
 
 app.post("/botresponse", async (req, res) => {
   const message = req.body;
@@ -44,7 +43,7 @@ app.post("/botresponse", async (req, res) => {
   });
   _messages.push({ role: "user", content: message.data });
   var botResponse = await getCompletion(_messages);
-  var botMessage = botResponse.data.choices[0].message.content;
+  var botMessage = botResponse.choices[0].message.content;
   _messages.push({ role: "system", content: botMessage });
   res.status(200).json(botMessage);
 });
@@ -55,7 +54,7 @@ app.listen(PORT, () => {
 
 async function getCompletion(messages) {
   try {
-    const resp = await openai.createChatCompletion({
+    const resp = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: messages,
       temperature: 0.4,
@@ -63,15 +62,13 @@ async function getCompletion(messages) {
     return resp;
   } catch (err) {
     const failedResponse = {
-      data: {
-        choices: [
-          {
-            message: {
-              content: "An error occurred. Please try again.",
-            },
+      choices: [
+        {
+          message: {
+            content: "An error occurred. Please try again.",
           },
-        ],
-      },
+        },
+      ],
     };
     return failedResponse;
   }
