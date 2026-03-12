@@ -10,7 +10,6 @@
     "scripts": {
         "dev:teamsfx": "env-cmd --silent -f .localConfigs npm run dev",
         "dev": "func start --javascript --language-worker=\"--inspect=9239\" --port \"3978\" --cors \"*\"",
-        "prepare-storage:teamsfx": "azurite --silent --location ./_storage_emulator --debug ./_storage_emulator/debug.log",
         "start": "npx func start",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
@@ -24,7 +23,6 @@
         "botbuilder": "^4.18.0"
     },
     "devDependencies": {
-        "azurite": "^3.16.0",
         "env-cmd": "^10.1.0"
     }
 }
